@@ -19,6 +19,13 @@ def demander_message():
     return message
 
 def chiffrer(M, alpha, beta, n):
-    x =1
-
-print(demander_message())
+    C = str()
+    for lettre in M:
+        nb = ord(lettre)
+        C += chr(((alpha*nb) + beta) % n)
+    return C
+    
+alpha = 89
+beta = 69
+n = 90
+print(chiffrer(demander_message(), alpha, beta, n))
