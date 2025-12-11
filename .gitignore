@@ -1,0 +1,15 @@
+# Ignore Python cache folders
+__pycache__/
+*/__pycache__/
+**/__pycache__/
+
+# Ignore compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore cache from packaging and builds
+*.egg-info/
+*.egg
+dist/
+build/
