@@ -1,7 +1,12 @@
+import json
 def get_legende(chars: str):
     dic = {char: chars.index(char) for char in chars}
     length = len(dic)
     return [dic, length]
+
+def load_json(legende):
+    with open("characteres.json", "w") as f:
+        json.dump(legende, f, indent=4)
 
 def demander_message():
     message = input("Enter message: ")
@@ -49,6 +54,7 @@ def déchiffrer(C, alpha, beta, n):
 
 characteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%?&*()/.,' "
 legende = get_legende(characteres)
+load_json(legende)
 print(legende)
 alpha = 67
 beta = 69
