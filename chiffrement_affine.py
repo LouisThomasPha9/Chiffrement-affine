@@ -35,9 +35,45 @@ class ChiffrementAffine(ctk.CTkFrame):
         button.pack(pady=(50,50))
 
     def validate_entry(self):
+        char_inconnu = set()
         MDP = self.entry_field.get().strip()
+
+        if hasattr(self, "message_label"):
+            self.message_label.destroy()
+            del self.message_label
+        if hasattr(self, "after_id"):
+            self.after_cancel(self.after_id)
+
         for char in MDP: # pour chaque charactere dans le mot de passe
             if char not in self.main.legende.keys():
-                print("not in legende")
+                char_inconnu.add(char)
+        
+        if len(char_inconnu) == 1:
+            if not hasattr(self, "message_label"):
+                self.message_label = ctk.CTkLabel(self, text=f"Le charactère \" {list(char_inconnu)[0]} \" est inconnu dans la légende"
+                                            ,font=("Arial", 12), text_color="red")
+                self.message_label.pack(pady=30)
+                self.after_id = self.after(4000, lambda: self.destroy_message())
 
-        print(MDP)
+        elif len(char_inconnu) != 0:
+            if not hasattr(self, "message_label"):
+                text = str()
+
+                for char in char_inconnu:
+                    if len(text) == 0:
+                        text += char
+                    if char not in text:
+                        text += ", " + char
+
+                self.message_label = ctk.CTkLabel(self, text=f"Les charactères \" {text} \" sont inconnus dans la légende"
+                                            ,font=("Arial", 12), text_color="red")
+                self.message_label.pack(pady=30)
+                self.after_id = self.after(4000, lambda: self.destroy_message())
+        
+    
+    def destroy_message(self):
+        if hasattr(self, "message_label"):
+            self.message_label.destroy()
+            del self.message_label
+        if hasattr(self, "after_id"):
+            self.after_cancel(self.after_id)
