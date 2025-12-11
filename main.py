@@ -14,9 +14,7 @@ class MainApp(ctk.CTk):
         self.title(APP_TITLE)
         self.legende = json.load(open("characteres.json"))[0]
         self.d = json.load(open("characteres.json"))[1]
-        self.open()
-
-    def open(self):
+        self.message = None
         self.CA_Window = ChiffrementAffine(self)
 
 if __name__ == "__main__":
