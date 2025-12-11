@@ -1,14 +1,12 @@
-def demander_message():
-    message = input("Enter message: ")
+import customtkinter as ctk
 
-    # mauvais_message = True
-    # while mauvais_message == True:
-    #     mauvais_message = True
-    #     for lettre in message:
-    #         if ord(lettre) < 32 or ord(lettre) > 122:
-    #             print ("mauvais message")
-    #             mauvais_message = True
+APP_GEOMETRY = "900x700"
+APP_TITLE = "Encription App"
 
-    return message
-
-print(demander_message())
+class MainApp(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        ctk.set_appearance_mode("Dark") 
+        self.geometry(APP_GEOMETRY)
+        self.title(APP_TITLE)
+        
