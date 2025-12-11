@@ -9,4 +9,7 @@ class MainApp(ctk.CTk):
         ctk.set_appearance_mode("Dark") 
         self.geometry(APP_GEOMETRY)
         self.title(APP_TITLE)
-        
+        self.open_window()
+    
+    def open_window():
+        pass
