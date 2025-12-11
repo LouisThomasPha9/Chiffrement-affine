@@ -1,27 +1,20 @@
+import customtkinter as ctk
 
+ctk.set_appearance_mode("System")
+ctk.set_default_color_theme("dark-blue")
 
-import customtkinter
-
-# Set the appearance mode (e.g., "Dark", "Light", "System")
-customtkinter.set_appearance_mode("System")
-# Set the default color theme (e.g., "blue", "dark-blue", "green")
-customtkinter.set_default_color_theme("dark-blue")
-
-# Create the main window
-app = customtkinter.CTk()
+app = ctk.CTk()
 app.title("My CustomTkinter Window")
-app.geometry("400x300")
+app.geometry("500x500")
 
-# Create a button
-def button_function():
-    print("Button pressed!")
+def button_appear_input_feild():
+    entry_field = ctk.CTkEntry(master=app, placeholder_text="Enter your message", width=200, height=30, corner_radius=10, fg_color=("lightgray", "white"), text_color="Black", placeholder_text_color="lightgray")
+    entry_field.pack(pady=10,padx = 10, anchor="center")
 
-button = customtkinter.CTkButton(master=app, text="Press Me", command=button_function)
-button.pack(pady=20)
 
-# Create a label
-label = customtkinter.CTkLabel(master=app, text="Welcome to CustomTkinter!")
-label.pack()
+button = ctk.CTkButton(master=app, text="Incript Message", command=button_appear_input_feild, width=300, height=75)
+button.pack(pady=100)
 
-# Run the application
+
+
 app.mainloop()
