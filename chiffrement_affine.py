@@ -19,18 +19,25 @@ class ChiffrementAffine(ctk.CTkFrame):
                                    fg_color=("lightgray", "white"), text_color="Black", 
                                    placeholder_text_color="lightgray")
         self.entry_field.pack(side="left", padx=(0,5)) 
+
+        # ça c juste pour lier la fonction validate entry avec la touche enter
+        self.entry_field.bind("<Return>", lambda event: self.validate_entry())
         
-        self.entry_button = ctk.CTkButton(self.entry_container, text="Valider", width=80, height=30,
+        entry_button = ctk.CTkButton(self.entry_container, text="Valider", width=80, height=30,
                                         command=self.validate_entry)
-        self.entry_button.pack(side="left")
+        entry_button.pack(side="left")
 
     def create_widgets(self):
+        titre = ctk.CTkLabel(self, text="Encription avec Chiffrement Affine", font=("Impact", 32, "bold"))
+        titre.pack(pady=(50,30))
         button = ctk.CTkButton(self, text="Incript Message", 
                                command=self.button_appear_input_feild, width=300, height=75)
-        button.pack(pady=(100,50))
+        button.pack(pady=(50,50))
 
     def validate_entry(self):
-        pass
+        MDP = self.entry_field.get().strip()
+        for char in MDP: # pour chaque charactere dans le mot de passe
+            if char not in self.main.legende.keys():
+                print("not in legende")
 
-
-
+        print(MDP)
