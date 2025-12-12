@@ -68,11 +68,22 @@ class ChiffrementAffine(ctk.CTkFrame):
                                             ,font=("Arial", 12), text_color="red")
                 self.message_label.pack(pady=30)
                 self.after_id = self.after(4000, lambda: self.destroy_message())   
-        else:
+        else :
             self.main.message = message
             self.entry_field.delete(0, "end")
             self.focus()
+            self.coder_message()
     
+    def coder_message(self):
+        chiffre = str()
+        for lettre in self.main.message:
+            nb = ((self.main.legende[lettre] * self.main.alpha) + self.main.beta) % self.main.d
+            for key, value in self.main.legende.items():
+                if value == nb:
+                    chiffre += key
+        
+        print(chiffre)
+
     def destroy_message(self):
         if hasattr(self, "message_label"):
             self.message_label.destroy()
