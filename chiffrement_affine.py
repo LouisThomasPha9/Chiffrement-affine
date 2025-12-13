@@ -4,6 +4,7 @@ class ChiffrementAffine(ctk.CTkFrame):
     def __init__(self, main):
         super().__init__(main)
         self.main = main
+        self.chiffre = None
         self.pack(fill="both", expand=True)
         self.create_widgets()
 
@@ -26,6 +27,26 @@ class ChiffrementAffine(ctk.CTkFrame):
         entry_button = ctk.CTkButton(self.entry_container, text="Valider", width=80, height=30,
                                         command=self.validate_entry)
         entry_button.pack(side="left")
+
+        output_label = ctk.CTkLabel(self, text="Output:", font=("Arial", 12))
+        output_label.pack(pady=(50,5))
+
+        self.cripted_container = ctk.CTkFrame(self)
+        self.cripted_container.pack(anchor="center")
+
+        self.cripted_label = ctk.CTkEntry(self.cripted_container, 
+                                            width=200, height=30, corner_radius=10, 
+                                            fg_color=("lightgray", "white"), text_color="lightgray", 
+                                            state="readonly")
+        self.cripted_label.configure(state="normal")
+        self.cripted_label.delete(0, "end")
+        self.cripted_label.insert(0, "Nothing submitted")
+        self.cripted_label.configure(state="readonly")
+        self.cripted_label.pack(side="left", padx=(0,5))
+
+        copy_button = ctk.CTkButton(self.cripted_container, text="Copy", width=80, height=30,
+                                        command=self.copy_message)
+        copy_button.pack(side="left")
 
     def create_widgets(self):
         titre = ctk.CTkLabel(self, text="Encription avec Chiffrement Affine", font=("Impact", 32, "bold"))
@@ -81,8 +102,16 @@ class ChiffrementAffine(ctk.CTkFrame):
             for key, value in self.main.legende.items():
                 if value == nb:
                     chiffre += key
-        
-        print(chiffre)
+        self.chiffre = chiffre
+        self.cripted_label.configure(state="normal", text_color="Black")
+        self.cripted_label.delete(0, "end")
+        self.cripted_label.insert(0, self.chiffre)
+        self.cripted_label.configure(state="readonly")
+    
+    def copy_message(self):
+        self.clipboard_clear()
+        self.clipboard_append(self.chiffre)
+        self.update()
 
     def destroy_message(self):
         if hasattr(self, "message_label"):
