@@ -8,27 +8,18 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.pack(fill="both", expand=True)
         self.create_widgets()
 
-    def button_appear_input_feild(self):
+    def button_appear_input_feild_incript(self):
         if hasattr(self, "entry_container"):
             return
         
         self.entry_container = ctk.CTkFrame(self.cripting_container)
         self.entry_container.pack(pady=10, anchor="center")
 
-        self.entry_container_right = ctk.CTkFrame(self.decripting_container)
-        self.entry_container_right.pack(pady=10, anchor="center")
-
         self.entry_field = ctk.CTkEntry(self.entry_container, placeholder_text="Enter your message", 
                                    width=200, height=30, corner_radius=10, 
                                    fg_color=("lightgray", "white"), text_color="Black", 
                                    placeholder_text_color="lightgray")
         self.entry_field.pack(side="left", padx=(0,5)) 
-
-        self.entry_field_decription = ctk.CTkEntry(self.entry_container_right, placeholder_text="Enter your encripted message", 
-                                   width=200, height=30, corner_radius=10, 
-                                   fg_color=("lightgray", "white"), text_color="Black", 
-                                   placeholder_text_color="lightgray")
-        self.entry_field_decription.pack(side="left", padx=(0,5)) 
 
         # ça c juste pour lier la fonction validate entry avec la touche enter
         self.entry_field.bind("<Return>", lambda event: self.validate_entry())
@@ -37,21 +28,11 @@ class ChiffrementAffine(ctk.CTkFrame):
                                         command=self.validate_entry)
         entry_button.pack(side="left")
 
-        entry_button_decription = ctk.CTkButton(self.entry_container_right, text="Valider", width=80, height=30,
-                                        command=self.validate_entry)
-        entry_button_decription.pack(side="left")
-
         output_label = ctk.CTkLabel(self.cripting_container, text="Output:", font=("Arial", 12))
-        output_label.pack(pady=(50,5))
-
-        output_label = ctk.CTkLabel(self.decripting_container, text="Output:", font=("Arial", 12))
         output_label.pack(pady=(50,5))
 
         self.cripted_container = ctk.CTkFrame(self.cripting_container)
         self.cripted_container.pack(anchor="center")
-
-        self.decripted_container = ctk.CTkFrame(self.decripting_container)
-        self.decripted_container.pack(anchor="center")
 
         self.cripted_label = ctk.CTkEntry(self.cripted_container, 
                                             width=200, height=30, corner_radius=10, 
@@ -63,6 +44,33 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.cripted_label.configure(state="readonly")
         self.cripted_label.pack(side="left", padx=(0,5))
 
+        copy_button = ctk.CTkButton(self.cripted_container, text="Copy", width=80, height=30,
+                                        command=self.copy_message)
+        copy_button.pack(side="left")
+    
+    def button_appear_input_feild_decript(self):
+        if hasattr(self, "entry_container_right"):
+            return
+        
+        self.entry_container_right = ctk.CTkFrame(self.decripting_container)
+        self.entry_container_right.pack(pady=10, anchor="center")
+
+        self.entry_field_decription = ctk.CTkEntry(self.entry_container_right, placeholder_text="Enter your encripted message", 
+                                   width=200, height=30, corner_radius=10, 
+                                   fg_color=("lightgray", "white"), text_color="Black", 
+                                   placeholder_text_color="lightgray")
+        self.entry_field_decription.pack(side="left", padx=(0,5)) 
+
+        entry_button_decription = ctk.CTkButton(self.entry_container_right, text="Valider", width=80, height=30,
+                                        command=self.validate_entry)
+        entry_button_decription.pack(side="left")
+
+        output_label = ctk.CTkLabel(self.decripting_container, text="Output:", font=("Arial", 12))
+        output_label.pack(pady=(50,5))
+
+        self.decripted_container = ctk.CTkFrame(self.decripting_container)
+        self.decripted_container.pack(anchor="center")
+
         self.decripted_label = ctk.CTkEntry(self.decripted_container, 
                                             width=200, height=30, corner_radius=10, 
                                             fg_color=("lightgray", "white"), text_color="lightgray", 
@@ -72,10 +80,6 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.decripted_label.insert(0, "Nothing submitted")
         self.decripted_label.configure(state="readonly")
         self.decripted_label.pack(side="left", padx=(0,5))
-
-        copy_button = ctk.CTkButton(self.cripted_container, text="Copy", width=80, height=30,
-                                        command=self.copy_message)
-        copy_button.pack(side="left")
 
         copy_button = ctk.CTkButton(self.decripted_container, text="Copy", width=80, height=30,
                                         command=self.copy_message)
@@ -89,17 +93,17 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.main_container.pack(anchor="center")
 
         self.cripting_container = ctk.CTkFrame(self.main_container,  fg_color="transparent")
-        self.cripting_container.pack(ancho="center", side="left", padx=30)
+        self.cripting_container.pack(ancho="n", side="left", padx=30)
 
         self.decripting_container = ctk.CTkFrame(self.main_container,  fg_color="transparent")
-        self.decripting_container.pack(anchor="center", side="right", padx=30)
+        self.decripting_container.pack(anchor="n", side="right", padx=30)
 
         button = ctk.CTkButton(self.cripting_container, text="Incript Message", 
-                               command=self.button_appear_input_feild, width=300, height=75)
+                               command=self.button_appear_input_feild_incript, width=300, height=75)
         button.pack(pady=(50,50))
 
         button = ctk.CTkButton(self.decripting_container, text="Decript Message", 
-                               command=self.button_appear_input_feild, width=300, height=75)
+                               command=self.button_appear_input_feild_decript, width=300, height=75)
         button.pack(pady=(50,50))
 
     def validate_entry(self):
