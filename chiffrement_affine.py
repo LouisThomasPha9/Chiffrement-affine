@@ -5,6 +5,7 @@ class ChiffrementAffine(ctk.CTkFrame):
         super().__init__(main)
         self.main = main
         self.chiffre = None
+        self.decripted = None
         self.alpha_decript = None
         self.beta_decript = None
         self.message_decript = None
@@ -118,7 +119,7 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.decripted_label.pack(side="left", padx=(0,10))
 
         copy_button = ctk.CTkButton(self.decripted_container, text="Copy", width=80, height=30,
-                                        command=self.copy_message)
+                                        command=self.copy_message_decripted)
         copy_button.pack(side="left")
 
     def create_widgets(self):
@@ -152,6 +153,12 @@ class ChiffrementAffine(ctk.CTkFrame):
             y = r
             r = x%y
         return y
+    
+    @staticmethod
+    def inverse_modulaire(a, d):
+        for i in range(d):
+            if (a * i) % d == 1:
+                return i
     
     def valeurs_possibles_alpha(self):
         l = list()
@@ -209,7 +216,16 @@ class ChiffrementAffine(ctk.CTkFrame):
                 self.decoder_message()
 
     def decoder_message(self):
-        pass      
+        m = str()
+        for lettre in self.message_decript:
+            for key, value in self.main.legende.items():
+                if value == (self.inverse_modulaire(int(self.alpha_decript), self.main.d) * (self.main.legende[lettre] - self.beta_decript)) % self.main.d:
+                    m += key
+        self.decripted = m
+        self.decripted_label.configure(state="normal", text_color="Black")
+        self.decripted_label.delete(0, "end")
+        self.decripted_label.insert(0, self.decripted)
+        self.decripted_label.configure(state="readonly")
     
     def validate_entry_beta(self):
         b = int(self.beta_entry.get().strip())
@@ -288,6 +304,11 @@ class ChiffrementAffine(ctk.CTkFrame):
     def copy_message(self):
         self.clipboard_clear()
         self.clipboard_append(self.chiffre)
+        self.update()
+
+    def copy_message_decripted(self):
+        self.clipboard_clear()
+        self.clipboard_append(self.decripted)
         self.update()
 
     def destroy_message(self):
