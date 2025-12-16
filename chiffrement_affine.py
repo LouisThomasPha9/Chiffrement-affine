@@ -7,6 +7,7 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.chiffre = None
         self.alpha_decript = None
         self.beta_decript = None
+        self.message_decript = None
         self.pack(fill="both", expand=True)
         self.valeurs_possibles_alpha()
         self.create_widgets()
@@ -86,6 +87,7 @@ class ChiffrementAffine(ctk.CTkFrame):
         alpha_label.pack(side="left", padx=(0,5))
 
         l = [str(nb) for nb in self.main.liste_alpha]
+        l.insert(0, "Key")
         self.dropdown = ctk.CTkOptionMenu(alpha_container, values=l, width=75, command=self.select_alpha)
         self.dropdown.pack(side="right")
 
@@ -159,11 +161,55 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.main.liste_alpha = l
 
     def select_alpha(self, value):
-        self.alpha_decript = value
-        print(value)
+        if value == "Key":
+            return
+        else:
+            self.alpha_decript = value
+            if self.beta_decript is not None and self.message_decript is not None:
+                self.decoder_message()
 
     def validate_entry_decription(self):
-        print("nigga")
+        char_inconnu = set()
+        message = self.entry_field_decription.get().strip()
+
+        if hasattr(self, "message_label"):
+            self.message_label.destroy()
+            del self.message_label
+        if hasattr(self, "after_id"):
+            self.after_cancel(self.after_id)
+
+        for char in message: 
+            if char not in self.main.legende.keys():
+                char_inconnu.add(char)
+        
+        if len(char_inconnu) == 1:
+            if not hasattr(self, "message_label"):
+                self.message_label = ctk.CTkLabel(self, text=f"Le charactère \" {list(char_inconnu)[0]} \" est inconnu dans la légende"
+                                            ,font=("Arial", 12), text_color="red")
+                self.message_label.pack(pady=30)
+                self.after_id = self.after(4000, lambda: self.destroy_message())
+        elif len(char_inconnu) != 0:
+            if not hasattr(self, "message_label"):
+                text = str()
+
+                for char in char_inconnu:
+                    if len(text) == 0:
+                        text += char
+                    if char not in text:
+                        text += ", " + char
+
+                self.message_label = ctk.CTkLabel(self, text=f"Les charactères \" {text} \" sont inconnus dans la légende"
+                                            ,font=("Arial", 12), text_color="red")
+                self.message_label.pack(pady=30)
+                self.after_id = self.after(4000, lambda: self.destroy_message())   
+        else :  
+            self.focus()
+            self.message_decript = message
+            if self.alpha_decript is not None and self.beta_decript is not None:
+                self.decoder_message()
+
+    def decoder_message(self):
+        pass      
     
     def validate_entry_beta(self):
         b = int(self.beta_entry.get().strip())
@@ -183,6 +229,8 @@ class ChiffrementAffine(ctk.CTkFrame):
         else:
             self.beta_decript = b
             self.focus()
+            if self.alpha_decript is not None and self.message_decript is not None:
+                self.decoder_message()
 
     def validate_entry(self):
         char_inconnu = set()
