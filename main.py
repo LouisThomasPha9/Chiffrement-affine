@@ -17,6 +17,7 @@ class MainApp(ctk.CTk):
         self.alpha = 2
         self.beta = 0
         self.message = None
+        self.liste_alpha = None
         self.CA_Window = ChiffrementAffine(self)
 
 if __name__ == "__main__":

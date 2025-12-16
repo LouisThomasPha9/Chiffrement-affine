@@ -8,6 +8,7 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.alpha_decript = None
         self.beta_decript = None
         self.pack(fill="both", expand=True)
+        self.valeurs_possibles_alpha()
         self.create_widgets()
 
     def button_appear_input_feild_incript(self):
@@ -84,8 +85,8 @@ class ChiffrementAffine(ctk.CTkFrame):
         alpha_label = ctk.CTkLabel(alpha_container, text="Alpha:", font=("Arial", 12), width=65, anchor="w")
         alpha_label.pack(side="left", padx=(0,5))
 
-        rnd = ["1","2","3","4"]
-        self.dropdown = ctk.CTkOptionMenu(alpha_container, values=rnd, width=75, command=self.select)
+        l = [str(nb) for nb in self.main.liste_alpha]
+        self.dropdown = ctk.CTkOptionMenu(alpha_container, values=l, width=75, command=self.select_alpha)
         self.dropdown.pack(side="right")
 
         beta_label = ctk.CTkLabel(beta_container, text="Beta:", font=("Arial", 12), width=65)
@@ -139,7 +140,25 @@ class ChiffrementAffine(ctk.CTkFrame):
                                command=self.button_appear_input_feild_decript, width=300, height=75)
         button.pack(pady=(50,50))
 
-    def select(self, value):
+    @staticmethod
+    def pgcd(a,b):
+        x = a
+        y = b
+        r = x%y
+        while r != 0:
+            x = y
+            y = r
+            r = x%y
+        return y
+    
+    def valeurs_possibles_alpha(self):
+        l = list()
+        for i in range(self.main.d):
+            if self.pgcd(i,self.main.d) == 1:
+                l.append(i)
+        self.main.liste_alpha = l
+
+    def select_alpha(self, value):
         self.alpha_decript = value
         print(value)
 
