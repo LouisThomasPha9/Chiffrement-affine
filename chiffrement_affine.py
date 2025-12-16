@@ -5,6 +5,8 @@ class ChiffrementAffine(ctk.CTkFrame):
         super().__init__(main)
         self.main = main
         self.chiffre = None
+        self.alpha_decript = None
+        self.beta_decript = None
         self.pack(fill="both", expand=True)
         self.create_widgets()
 
@@ -16,10 +18,10 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.entry_container.pack(pady=10, anchor="center")
 
         self.entry_field = ctk.CTkEntry(self.entry_container, placeholder_text="Enter your message", 
-                                   width=200, height=30, corner_radius=10, 
+                                   width=210, height=30, corner_radius=10, 
                                    fg_color=("lightgray", "white"), text_color="Black", 
                                    placeholder_text_color="lightgray")
-        self.entry_field.pack(side="left", padx=(0,5)) 
+        self.entry_field.pack(side="left", padx=(0,10)) 
 
         # ça c juste pour lier la fonction validate entry avec la touche enter
         self.entry_field.bind("<Return>", lambda event: self.validate_entry())
@@ -35,14 +37,14 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.cripted_container.pack(anchor="center")
 
         self.cripted_label = ctk.CTkEntry(self.cripted_container, 
-                                            width=200, height=30, corner_radius=10, 
+                                            width=210, height=30, corner_radius=10, 
                                             fg_color=("lightgray", "white"), text_color="lightgray", 
                                             state="readonly")
         self.cripted_label.configure(state="normal")
         self.cripted_label.delete(0, "end")
         self.cripted_label.insert(0, "Nothing submitted")
         self.cripted_label.configure(state="readonly")
-        self.cripted_label.pack(side="left", padx=(0,5))
+        self.cripted_label.pack(side="left", padx=(0,10))
 
         copy_button = ctk.CTkButton(self.cripted_container, text="Copy", width=80, height=30,
                                         command=self.copy_message)
@@ -55,31 +57,62 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.entry_container_right = ctk.CTkFrame(self.decripting_container)
         self.entry_container_right.pack(pady=10, anchor="center")
 
-        self.entry_field_decription = ctk.CTkEntry(self.entry_container_right, placeholder_text="Enter your encripted message", 
-                                   width=200, height=30, corner_radius=10, 
+        self.entry_field_decription = ctk.CTkEntry(self.entry_container_right, placeholder_text="Enter encripted message", 
+                                   width=210, height=30, corner_radius=10, 
                                    fg_color=("lightgray", "white"), text_color="Black", 
                                    placeholder_text_color="lightgray")
-        self.entry_field_decription.pack(side="left", padx=(0,5)) 
+        self.entry_field_decription.pack(side="left", padx=(0,10)) 
+
+        self.entry_field_decription.bind("<Return>", lambda event: self.validate_entry_decription()) 
 
         entry_button_decription = ctk.CTkButton(self.entry_container_right, text="Valider", width=80, height=30,
-                                        command=self.validate_entry)
+                                        command=self.validate_entry_decription)
         entry_button_decription.pack(side="left")
 
+        key_label = ctk.CTkLabel(self.decripting_container, text="Keys:", font=("Arial", 12), width=300, anchor="w")
+        key_label.pack(pady=(5,5))
+
+        self.key_container = ctk.CTkFrame(self.decripting_container)
+        self.key_container.pack()
+
+        alpha_container = ctk.CTkFrame(self.key_container, fg_color="transparent")
+        alpha_container.pack(side="left")
+
+        beta_container = ctk.CTkFrame(self.key_container, fg_color="transparent")
+        beta_container.pack(side="right", padx=(25,0))
+
+        alpha_label = ctk.CTkLabel(alpha_container, text="Alpha:", font=("Arial", 12), width=65, anchor="w")
+        alpha_label.pack(side="left", padx=(0,5))
+
+        rnd = ["1","2","3","4"]
+        self.dropdown = ctk.CTkOptionMenu(alpha_container, values=rnd, width=75, command=self.select)
+        self.dropdown.pack(side="right")
+
+        beta_label = ctk.CTkLabel(beta_container, text="Beta:", font=("Arial", 12), width=65)
+        beta_label.pack(side="left")
+
+        self.beta_entry = ctk.CTkEntry(beta_container, width=65, height=30, corner_radius=10, 
+                                            placeholder_text="Key",
+                                            fg_color=("lightgray", "white"), text_color="Black")
+        self.beta_entry.pack(side="right")
+
+        self.beta_entry.bind("<Return>", lambda event: self.validate_entry_beta()) 
+
         output_label = ctk.CTkLabel(self.decripting_container, text="Output:", font=("Arial", 12))
-        output_label.pack(pady=(50,5))
+        output_label.pack(pady=(25,5))
 
         self.decripted_container = ctk.CTkFrame(self.decripting_container)
         self.decripted_container.pack(anchor="center")
 
         self.decripted_label = ctk.CTkEntry(self.decripted_container, 
-                                            width=200, height=30, corner_radius=10, 
+                                            width=210, height=30, corner_radius=10, 
                                             fg_color=("lightgray", "white"), text_color="lightgray", 
                                             state="readonly")
         self.decripted_label.configure(state="normal")
         self.decripted_label.delete(0, "end")
         self.decripted_label.insert(0, "Nothing submitted")
         self.decripted_label.configure(state="readonly")
-        self.decripted_label.pack(side="left", padx=(0,5))
+        self.decripted_label.pack(side="left", padx=(0,10))
 
         copy_button = ctk.CTkButton(self.decripted_container, text="Copy", width=80, height=30,
                                         command=self.copy_message)
@@ -105,6 +138,32 @@ class ChiffrementAffine(ctk.CTkFrame):
         button = ctk.CTkButton(self.decripting_container, text="Decript Message", 
                                command=self.button_appear_input_feild_decript, width=300, height=75)
         button.pack(pady=(50,50))
+
+    def select(self, value):
+        self.alpha_decript = value
+        print(value)
+
+    def validate_entry_decription(self):
+        print("nigga")
+    
+    def validate_entry_beta(self):
+        b = int(self.beta_entry.get().strip())
+
+        if hasattr(self, "message_label"):
+            self.message_label.destroy()
+            del self.message_label
+        if hasattr(self, "after_id"):
+            self.after_cancel(self.after_id)
+
+        if b >= self.main.d:
+            if not hasattr(self, "message_label"):
+                self.message_label = ctk.CTkLabel(self, text=f"Ta clé beta {b} est plus grand que d {self.main.d}"
+                                            ,font=("Arial", 12), text_color="red")
+                self.message_label.pack(pady=30)
+                self.after_id = self.after(4000, lambda: self.destroy_message())
+        else:
+            self.beta_decript = b
+            self.focus()
 
     def validate_entry(self):
         char_inconnu = set()
