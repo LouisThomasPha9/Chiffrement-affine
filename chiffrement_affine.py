@@ -226,6 +226,7 @@ class ChiffrementAffine(ctk.CTkFrame):
         self.decripted_label.delete(0, "end")
         self.decripted_label.insert(0, self.decripted)
         self.decripted_label.configure(state="readonly")
+        self.entry_field_decription.delete(0, "end")
     
     def validate_entry_beta(self):
         b = int(self.beta_entry.get().strip())
